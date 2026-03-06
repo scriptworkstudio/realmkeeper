@@ -692,8 +692,8 @@
         <div class="howto-block" style="border-color:rgba(74,127,212,.35);background:rgba(74,127,212,.06);">
           <div class="howto-step">🖥 <span style="color:#4a7fd4;">Get the Desktop Version</span></div>
           <div class="howto-desc">You're using the <strong style="color:var(--sidebar-text);">Lite</strong> browser version of Realm Keeper, which has a ~5 MB storage limit. The full <strong style="color:var(--sidebar-text);">Desktop App</strong> removes all limits, saves directly to your filesystem, and runs offline without a browser.<br><br>
-          <a href="https://github.com/scriptworkstudio/realmkeeper/releases/latest" target="_blank" style="display:inline-flex;align-items:center;gap:8px;margin-top:6px;padding:7px 14px;background:rgba(74,127,212,.15);border:1px solid rgba(74,127,212,.4);border-radius:5px;color:#4a7fd4;font-family:'Cinzel',serif;font-size:10px;letter-spacing:.08em;text-decoration:none;transition:all .15s;" onmouseover="this.style.background='rgba(74,127,212,.25)'" onmouseout="this.style.background='rgba(74,127,212,.15)'">⬇ Download Realm Keeper Desktop</a>
-          <span style="display:block;margin-top:8px;font-size:11px;color:rgba(216,208,184,.35);font-style:italic;">Free download for Windows — no install required to use the Lite version above.</span>
+          <a href="https://github.com/scriptworkstudio/realmkeeper/releases/latest/download/Realm.Keeper.Setup.1.0.0.exe" target="_blank" style="display:inline-flex;align-items:center;gap:8px;margin-top:6px;padding:7px 14px;background:rgba(74,127,212,.15);border:1px solid rgba(74,127,212,.4);border-radius:5px;color:#4a7fd4;font-family:'Cinzel',serif;font-size:10px;letter-spacing:.08em;text-decoration:none;transition:all .15s;" onmouseover="this.style.background='rgba(74,127,212,.25)'" onmouseout="this.style.background='rgba(74,127,212,.15)'">⬇ Download Realm Keeper Desktop</a>
+          <span style="display:block;margin-top:8px;font-size:11px;color:rgba(216,208,184,.35);font-style:italic;">Free download for Windows. Note: Windows may show a SmartScreen warning on first launch — click "More info" then "Run anyway" to proceed.</span>
           </div>
         </div>
 
@@ -739,12 +739,12 @@
 
         <div class="howto-block">
           <div class="howto-step">💾 <span>Saving & Loading</span></div>
-          <div class="howto-desc">Your world auto-saves to this browser as you work. Use <strong>💾 Save</strong> to download a <code>.json</code> file to your computer — useful for backups or moving between devices. Use <strong>📂 Load</strong> to open a previously saved file. The tool also works fully offline — download the HTML file and open it locally.</div>
+          <div class="howto-desc">Your world auto-saves to your device as you work — no storage limits in modern browsers. Use <strong>💾 Save</strong> to export a <code>.json</code> file as a backup or to move your world between devices. Use <strong>📂 Load</strong> to restore a previously saved file.</div>
         </div>
 
-        <div class="howto-block" style="border-color:rgba(184,146,42,.25);background:rgba(184,146,42,.04);">
-          <div class="howto-step">⚠ <span style="color:#d4a843;">Storage Limits (Lite Version)</span></div>
-          <div class="howto-desc">This browser version stores your world in <strong>localStorage</strong>, which has a hard limit of around <strong>5 MB</strong>. Large map images embedded in your world will count toward this limit — if you get close, a warning will appear. To avoid data loss: <strong>save your world to a file regularly</strong> using the 💾 Save button. Keep map images compact (smaller JPEGs rather than large PNGs where possible). A <strong>desktop version</strong> of Realm Keeper is in development — it will remove this limit entirely by saving directly to your filesystem.</div>
+        <div class="howto-block" style="border-color:rgba(74,138,66,.25);background:rgba(74,138,66,.04);">
+          <div class="howto-step">✓ <span style="color:#4a8a42;">Works Offline & On Any Device</span></div>
+          <div class="howto-desc">Realm Keeper works fully offline after your first visit — just open the link once and it caches itself to your device. Auto-save uses your browser's private storage (OPFS) which has no meaningful size limit on Chrome, Edge, Firefox, and Safari. On very old browsers it falls back to localStorage (5 MB cap) with a warning. A <strong>Windows desktop app</strong> is also available via the download link — ideal if you prefer a native installed experience.</div>
         </div>
 
         <div class="howto-block">
@@ -900,8 +900,8 @@ const PIN_TYPES=[
 ];
 
 // ── INIT ───────────────────────────────────────────────────────
-function init(){
-  loadFromStorage();
+async function init(){
+  await loadFromStorage();
   if(!state.wiki)state.wiki=[];
   buildPinTypeGrid();
   switchSidebarTab('maps');
@@ -911,21 +911,61 @@ function init(){
   document.addEventListener('keydown',onKeyDown);
   document.addEventListener('click',()=>closeCtxMenu());
 }
-function loadFromStorage(){const r=localStorage.getItem('realmkeeper_v1');if(r){try{state=JSON.parse(r);}catch(e){}}}
-function save(){
-  const data=JSON.stringify(state);
-  const bytes=new Blob([data]).size;
-  const mb=(bytes/1024/1024).toFixed(2);
-  const pct=bytes/(5*1024*1024);
-  try{
-    localStorage.setItem('realmkeeper_v1',data);
-    if(pct>=0.8){
-      const remaining=((5*1024*1024-bytes)/1024).toFixed(0);
-      showStorageWarning(mb,remaining);
-    }
-  }catch(e){
-    showToast('⚠️ Storage full — save your world to a file now!','error');
+// ── STORAGE: OPFS first, localStorage fallback ─────────────────
+let _opfsRoot=null;
+let _saveQueue=Promise.resolve();
+async function getOPFS(){
+  if(_opfsRoot)return _opfsRoot;
+  if('storage' in navigator&&'getDirectory' in navigator.storage){
+    try{_opfsRoot=await navigator.storage.getDirectory();return _opfsRoot;}catch(e){}
   }
+  return null;
+}
+async function loadFromStorage(){
+  const root=await getOPFS();
+  if(root){
+    try{
+      const fh=await root.getFileHandle('realmkeeper_v1.json');
+      const file=await fh.getFile();
+      state=JSON.parse(await file.text());
+      return;
+    }catch(e){/* file doesn't exist yet — check for localStorage migration */}
+  }
+  // Migrate from localStorage if present
+  const legacy=localStorage.getItem('realmkeeper_v1');
+  if(legacy){
+    try{
+      state=JSON.parse(legacy);
+      // Migrate to OPFS and clear localStorage to free space
+      save();
+      try{localStorage.removeItem('realmkeeper_v1');}catch(e){}
+    }catch(e){}
+  }
+}
+function save(){
+  _saveQueue=_saveQueue.then(async()=>{
+    const data=JSON.stringify(state);
+    const root=await getOPFS();
+    if(root){
+      try{
+        const fh=await root.getFileHandle('realmkeeper_v1.json',{create:true});
+        const w=await fh.createWritable();
+        await w.write(data);await w.close();
+        return;
+      }catch(e){console.warn('OPFS write failed, falling back to localStorage',e);}
+    }
+    // localStorage fallback (old browsers)
+    const bytes=new Blob([data]).size;
+    const mb=(bytes/1024/1024).toFixed(2);
+    const pct=bytes/(5*1024*1024);
+    try{
+      localStorage.setItem('realmkeeper_v1',data);
+      if(pct>=0.8){
+        const remaining=((5*1024*1024-bytes)/1024).toFixed(0);
+        showStorageWarning(mb,remaining);
+      }
+    }catch(e){showToast('⚠️ Storage full — save your world to a file now!','error');}
+  });
 }
 function showStorageWarning(mb,remainingKb){
   let banner=document.getElementById('storage-warning-banner');
@@ -1427,8 +1467,12 @@ function confirmNewWorld(){
   closeModal('modal-new-world');
   resetWorld();
 }
-function resetWorld(){
+async function resetWorld(){
   try{localStorage.removeItem('realmkeeper_v1');}catch(e){}
+  try{
+    const root=await getOPFS();
+    if(root)await root.removeEntry('realmkeeper_v1.json');
+  }catch(e){}
   location.reload();
 }
 
@@ -2509,6 +2553,11 @@ document.addEventListener('click',e=>{
     }
   }
 });
+
+// ── SERVICE WORKER (offline support) ───────────────────────────
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('/realmkeeper/sw.js').catch(()=>{});
+}
 
 init();
 </script>
