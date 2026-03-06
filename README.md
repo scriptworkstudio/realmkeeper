@@ -83,7 +83,7 @@ If you find Realm Keeper useful, consider supporting Script Work Studio:
 
 👉 [buymeacoffee.com/scriptworkstudio](https://buymeacoffee.com/scriptworkstudio)
 
-Questions or feedback? [hello@scriptworkstudio.com](mailto:hello@scriptworkstudio.com)
+Questions or feedback? [scriptworkstudio@hotmail.com](mailto:scriptworkstudio@hotmail.com)
 
 ---
 
