@@ -529,6 +529,9 @@
          onmousemove="onViewportMouseMove(event)"
          onmouseup="onViewportMouseUp(event)"
          onwheel="onViewportWheel(event)"
+         ontouchstart="onViewportTouchStart(event)"
+         ontouchmove="onViewportTouchMove(event)"
+         ontouchend="onViewportTouchEnd(event)"
          ondragover="event.preventDefault()"
          ondrop="onMapDrop(event)">
       <div id="canvas-transform">
@@ -734,7 +737,7 @@
 
         <div class="howto-block">
           <div class="howto-step">🧭 <span>Navigating</span></div>
-          <div class="howto-desc"><strong>Pan</strong> by clicking and dragging. <strong>Zoom</strong> with the scroll wheel or the +/− buttons. <strong>Reset view</strong> with the ⌖ button. Use the breadcrumb trail to jump back up the map hierarchy.</div>
+          <div class="howto-desc"><strong>Pan</strong> by clicking and dragging (or single-finger drag on touch). <strong>Zoom</strong> with the scroll wheel, the +/− buttons, or a two-finger pinch on touch. <strong>Reset view</strong> with the ⌖ button. Use the breadcrumb trail to jump back up the map hierarchy.</div>
         </div>
 
         <div class="howto-block">
@@ -1188,6 +1191,74 @@ function onViewportWheel(e){
   const delta=e.deltaY>0?0.9:1.1;
   const ns=Math.min(8,Math.max(0.08,cam.scale*delta));
   cam.x=mx-(mx-cam.x)*(ns/cam.scale);cam.y=my-(my-cam.y)*(ns/cam.scale);cam.scale=ns;applyCamera();
+}
+
+// ── TOUCH HANDLERS (map viewport) ──────────────────────────────
+let _touch={dragging:false,pinching:false,lastDist:0,longPressTimer:null,startX:0,startY:0,moved:false};
+function _touchDist(t){return Math.hypot(t[0].clientX-t[1].clientX,t[0].clientY-t[1].clientY);}
+function _touchMid(t,rect){return{x:(t[0].clientX+t[1].clientX)/2-rect.left,y:(t[0].clientY+t[1].clientY)/2-rect.top};}
+function onViewportTouchStart(e){
+  e.preventDefault();
+  clearTimeout(_touch.longPressTimer);
+  if(e.touches.length===1){
+    const t=e.touches[0];
+    _touch.dragging=true;_touch.moved=false;
+    _touch.startX=t.clientX;_touch.startY=t.clientY;
+    dragStart={mx:t.clientX,my:t.clientY,cx:cam.x,cy:cam.y};
+    // Long-press fires context menu after 500ms (simulates right-click on pins)
+    _touch.longPressTimer=setTimeout(()=>{
+      if(!_touch.moved){
+        const el=document.elementFromPoint(t.clientX,t.clientY);
+        const pin=el&&el.closest('.map-pin');
+        if(pin)showCtxMenu(pin.dataset.id,t.clientX,t.clientY);
+      }
+    },500);
+  } else if(e.touches.length===2){
+    _touch.dragging=false;_touch.pinching=true;
+    _touch.lastDist=_touchDist(e.touches);
+  }
+}
+function onViewportTouchMove(e){
+  e.preventDefault();
+  clearTimeout(_touch.longPressTimer);
+  if(e.touches.length===1&&_touch.dragging&&!pinModeActive){
+    const t=e.touches[0];
+    const dx=t.clientX-dragStart.mx,dy=t.clientY-dragStart.my;
+    if(Math.abs(dx)>4||Math.abs(dy)>4)_touch.moved=true;
+    cam.x=dragStart.cx+dx;cam.y=dragStart.cy+dy;applyCamera();
+  } else if(e.touches.length===2&&_touch.pinching){
+    const rect=document.getElementById('canvas-viewport').getBoundingClientRect();
+    const dist=_touchDist(e.touches);
+    const factor=dist/_touch.lastDist;
+    const mid=_touchMid(e.touches,rect);
+    const ns=Math.min(8,Math.max(0.08,cam.scale*factor));
+    cam.x=mid.x-(mid.x-cam.x)*(ns/cam.scale);
+    cam.y=mid.y-(mid.y-cam.y)*(ns/cam.scale);
+    cam.scale=ns;applyCamera();
+    _touch.lastDist=dist;
+  }
+}
+function onViewportTouchEnd(e){
+  e.preventDefault();
+  clearTimeout(_touch.longPressTimer);
+  if(e.touches.length===0){
+    if(pinModeActive&&!_touch.moved&&_touch.dragging){
+      // Tap in pin-placement mode — place pin
+      const t=e.changedTouches[0];
+      const rect=document.getElementById('canvas-viewport').getBoundingClientRect();
+      const mx=(t.clientX-rect.left-cam.x)/cam.scale;
+      const my=(t.clientY-rect.top-cam.y)/cam.scale;
+      pendingPinPos={x:mx,y:my};
+      document.getElementById('new-pin-name').value='';
+      openModal('modal-add-pin');exitPinMode();
+    }
+    _touch.dragging=false;_touch.pinching=false;_touch.moved=false;
+  } else if(e.touches.length===1){
+    // Dropped from 2 fingers to 1 — resume drag
+    _touch.pinching=false;_touch.dragging=true;_touch.moved=true;
+    const t=e.touches[0];
+    dragStart={mx:t.clientX,my:t.clientY,cx:cam.x,cy:cam.y};
+  }
 }
 function onMapDrop(e){
   e.preventDefault();const file=e.dataTransfer.files[0];
@@ -2367,6 +2438,42 @@ function setupGraphInteraction(){
     gCam.y=my-(my-gCam.y)*(ns/gCam.scale);
     gCam.scale=ns;
   };
+  // Touch: single-finger pan, pinch zoom
+  let gTouch={dragging:false,pinching:false,lastDist:0};
+  svg.addEventListener('touchstart',e=>{
+    e.preventDefault();
+    if(e.touches.length===1){
+      const t=e.touches[0];
+      if(e.target.closest('.g-node'))return;
+      gTouch.dragging=true;gTouch.pinching=false;
+      gPan={active:true,startX:t.clientX,startY:t.clientY,camStartX:gCam.x,camStartY:gCam.y};
+    } else if(e.touches.length===2){
+      gTouch.dragging=false;gTouch.pinching=true;gPan.active=false;
+      gTouch.lastDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+    }
+  },{passive:false});
+  svg.addEventListener('touchmove',e=>{
+    e.preventDefault();
+    if(e.touches.length===1&&gTouch.dragging&&gPan.active){
+      const t=e.touches[0];
+      gCam.x=gPan.camStartX+(t.clientX-gPan.startX);
+      gCam.y=gPan.camStartY+(t.clientY-gPan.startY);
+    } else if(e.touches.length===2&&gTouch.pinching){
+      const rect=svg.getBoundingClientRect();
+      const dist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+      const mx=(e.touches[0].clientX+e.touches[1].clientX)/2-rect.left;
+      const my=(e.touches[0].clientY+e.touches[1].clientY)/2-rect.top;
+      const factor=dist/gTouch.lastDist;
+      const ns=Math.min(4,Math.max(0.15,gCam.scale*factor));
+      gCam.x=mx-(mx-gCam.x)*(ns/gCam.scale);
+      gCam.y=my-(my-gCam.y)*(ns/gCam.scale);
+      gCam.scale=ns;
+      gTouch.lastDist=dist;
+    }
+  },{passive:false});
+  svg.addEventListener('touchend',e=>{
+    if(e.touches.length===0){gTouch.dragging=false;gTouch.pinching=false;gPan.active=false;}
+  });
 }
 
 // ══════════════════════════════════════════════════════════════
