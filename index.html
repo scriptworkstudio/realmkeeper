@@ -16,52 +16,6 @@
     --shadow:rgba(20,18,10,0.22);--shadow-deep:rgba(20,18,10,0.45);
     --map-bg:#2a2d22;--pin-glow:rgba(184,146,42,0.35);
   }
-  /* ── THEMES ─────────────────────────────────────────────────── */
-  [data-theme="midnight"]{
-    --accent:#2a4080;--accent-light:#4060a8;--accent-hover:#364e98;
-    --gold:#6858a8;--gold-light:#8878c8;--crimson:#5a2870;
-    --border:#7a88c0;--border-light:#9aa0d8;
-    --sidebar-bg:#0d1020;--sidebar-mid:#131728;--sidebar-text:#c8d0e8;
-    --sidebar-muted:rgba(200,208,232,0.45);
-    --map-bg:#0a0d18;--pin-glow:rgba(104,88,168,0.35);
-  }
-  [data-theme="ember"]{
-    --accent:#8a2810;--accent-light:#b04020;--accent-hover:#9a3018;
-    --gold:#c87820;--gold-light:#e09030;--crimson:#6a1010;
-    --border:#c49060;--border-light:#d4a878;
-    --sidebar-bg:#1e0e08;--sidebar-mid:#281408;--sidebar-text:#ddd0b8;
-    --sidebar-muted:rgba(221,208,184,0.45);
-    --map-bg:#150a04;--pin-glow:rgba(200,120,32,0.35);
-  }
-  [data-theme="stone"]{
-    --accent:#4a6070;--accent-light:#6a8090;--accent-hover:#587080;
-    --gold:#9a8060;--gold-light:#b89878;--crimson:#7a4040;
-    --border:#8898a8;--border-light:#a0b0be;
-    --sidebar-bg:#1a1c1e;--sidebar-mid:#242628;--sidebar-text:#ccd0d4;
-    --sidebar-muted:rgba(204,208,212,0.45);
-    --map-bg:#131416;--pin-glow:rgba(154,128,96,0.35);
-  }
-  /* dm-only visibility (toggled by writer mode) */
-  body.writer-mode .dm-only-field{display:none!important;}
-  body.writer-mode #open5e-section{display:none!important;}
-  /* Settings modal swatches */
-  .theme-swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:6px;}
-  .theme-swatch{border-radius:7px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:all .15s;position:relative;}
-  .theme-swatch.active{border-color:var(--gold);}
-  .theme-swatch:hover{border-color:rgba(200,187,160,.5);}
-  .swatch-top{height:30px;}
-  .swatch-bot{height:18px;display:flex;align-items:center;justify-content:center;}
-  .swatch-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.06em;text-transform:uppercase;}
-  .swatch-check{position:absolute;top:4px;right:4px;font-size:10px;opacity:0;transition:opacity .15s;}
-  .theme-swatch.active .swatch-check{opacity:1;}
-  .mode-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px;}
-  .mode-btn{padding:12px 8px;border-radius:7px;border:1px solid rgba(200,187,160,.18);background:rgba(200,187,160,.04);cursor:pointer;text-align:center;transition:all .15s;color:var(--sidebar-text);}
-  .mode-btn:hover{background:rgba(200,187,160,.09);}
-  .mode-btn.active{border-color:var(--gold);background:rgba(184,146,42,.12);}
-  .mode-btn-icon{font-size:22px;margin-bottom:5px;}
-  .mode-btn-title{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.08em;color:var(--gold-light);margin-bottom:3px;}
-  .mode-btn-desc{font-size:10px;color:var(--sidebar-muted);line-height:1.4;}
-
   *{box-sizing:border-box;margin:0;padding:0;}
   body{background:var(--map-bg);color:var(--ink);font-family:'Source Serif 4',Georgia,serif;height:100vh;display:flex;flex-direction:column;overflow:hidden;user-select:none;}
 
@@ -454,7 +408,6 @@
     <div class="sep"></div>
     <button class="tb-btn" onclick="openGraphView()" title="Connection graph">🕸 Graph</button>
     <div class="sep"></div>
-    <button class="tb-btn" onclick="openModal('modal-settings')" title="Appearance & mode settings" id="btn-settings">⚙ Settings</button>
     <button class="tb-btn" onclick="openModal('modal-support')" title="Support & feedback">☕ Support</button>
     <button class="tb-btn" onclick="openModal('modal-howto')" title="How to use Realm Keeper">How To?</button>
   </div>
@@ -519,7 +472,6 @@
         <div id="wiki-list"></div>
         <div class="sidebar-add-btn" onclick="openNewWikiEntry()"><span>＋</span> New Entry</div>
         <!-- Open5e Monster Search -->
-        <div id="open5e-section">
         <div style="padding:4px 14px 0;">
           <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--sidebar-muted);padding:10px 0 6px;border-top:1px solid rgba(200,187,160,.08);">Monster Search (Open5e SRD)</div>
           <div id="open5e-bar" class="visible" style="padding:0 0 8px;background:none;border:none;">
@@ -528,7 +480,6 @@
           </div>
         </div>
         <div id="open5e-results"></div>
-        </div>
       </div>
     </div>
     <div id="branding">
@@ -620,10 +571,8 @@
       </select>
       <div class="rp-field-label">Description</div>
       <textarea class="rp-textarea" id="rp-desc" placeholder="Describe this place…" rows="4"></textarea>
-      <div class="dm-only-field">
       <div class="rp-field-label">Notes (DM only)</div>
       <textarea class="rp-textarea" id="rp-notes" placeholder="Secrets, plot hooks, hidden details…" rows="3"></textarea>
-      </div>
       <div class="rp-field-label">Nested Map</div>
       <div style="display:flex;gap:6px;align-items:center;">
         <select class="rp-select" id="rp-nested-map" style="flex:1;min-width:0;" onchange="onNestedMapChange()">
@@ -707,7 +656,7 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button class="tb-btn" onclick="closeModal('modal-add-map')">Cancel</button>
+      <button class="tb-btn" onclick="closeModal('modal-add-map');_pendingNestedPinId=null;">Cancel</button>
       <button class="tb-btn primary" onclick="confirmAddMap()">Add Map</button>
     </div>
   </div>
@@ -746,7 +695,7 @@
         <div class="howto-block" style="border-color:rgba(74,127,212,.35);background:rgba(74,127,212,.06);">
           <div class="howto-step">🖥 <span style="color:#4a7fd4;">Get the Desktop Version</span></div>
           <div class="howto-desc">You're using the <strong style="color:var(--sidebar-text);">Lite</strong> browser version of Realm Keeper, which has a ~5 MB storage limit. The full <strong style="color:var(--sidebar-text);">Desktop App</strong> removes all limits, saves directly to your filesystem, and runs offline without a browser.<br><br>
-          <a href="https://github.com/scriptworkstudio/realmkeeper/releases/latest/download/Realm.Keeper.Setup.exe" target="_blank" style="display:inline-flex;align-items:center;gap:8px;margin-top:6px;padding:7px 14px;background:rgba(74,127,212,.15);border:1px solid rgba(74,127,212,.4);border-radius:5px;color:#4a7fd4;font-family:'Cinzel',serif;font-size:10px;letter-spacing:.08em;text-decoration:none;transition:all .15s;" onmouseover="this.style.background='rgba(74,127,212,.25)'" onmouseout="this.style.background='rgba(74,127,212,.15)'">⬇ Download Realm Keeper Desktop</a>
+          <a href="https://github.com/scriptworkstudio/realmkeeper/releases/latest/download/Realm.Keeper.Setup.1.0.0.exe" target="_blank" style="display:inline-flex;align-items:center;gap:8px;margin-top:6px;padding:7px 14px;background:rgba(74,127,212,.15);border:1px solid rgba(74,127,212,.4);border-radius:5px;color:#4a7fd4;font-family:'Cinzel',serif;font-size:10px;letter-spacing:.08em;text-decoration:none;transition:all .15s;" onmouseover="this.style.background='rgba(74,127,212,.25)'" onmouseout="this.style.background='rgba(74,127,212,.15)'">⬇ Download Realm Keeper Desktop</a>
           <span style="display:block;margin-top:8px;font-size:11px;color:rgba(216,208,184,.35);font-style:italic;">Free download for Windows. Note: Windows may show a SmartScreen warning on first launch — click "More info" then "Run anyway" to proceed.</span>
           </div>
         </div>
@@ -763,7 +712,7 @@
 
         <div class="howto-block">
           <div class="howto-step">📖 <span>The Journal</span></div>
-          <div class="howto-desc">Click the <strong>Journal</strong> tab in the sidebar to manage all your world's entries. In <strong>DM Mode</strong> these are NPCs, Factions, Quests, Items, Lore, Monsters and Locations. In <strong>Writer Mode</strong> they become Characters, Factions, Plot Threads, Items, Lore, Creatures and Locations — with DM-only clutter removed. Click <strong>＋ New Entry</strong> to create one, or click any existing entry to open it.</div>
+          <div class="howto-desc">Click the <strong>Journal</strong> tab in the sidebar to manage all your world's entries — NPCs, Factions, Quests, Items, Lore, Monsters and Locations. Click <strong>＋ New Entry</strong> to create one, or click any existing entry to open it. Each type has its own tailored fields. Journal entries exist independently of the map — they're your world's knowledge base.</div>
         </div>
 
         <div class="howto-block">
@@ -853,11 +802,11 @@
           <span style="margin-left:auto;opacity:.5;font-size:12px;">↗</span>
         </a>
 
-        <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#115;&#99;&#114;&#105;&#112;&#116;&#119;&#111;&#114;&#107;&#115;&#116;&#117;&#100;&#105;&#111;&#64;&#104;&#111;&#116;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;" class="support-link">
+        <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#104;&#101;&#108;&#108;&#111;&#64;&#115;&#99;&#114;&#105;&#112;&#116;&#119;&#111;&#114;&#107;&#115;&#116;&#117;&#100;&#105;&#111;&#46;&#99;&#111;&#109;" class="support-link">
           <span style="font-size:20px;">✉</span>
           <div>
             <div style="font-weight:600;font-size:13px;color:var(--sidebar-text);">Feedback or Bug Reports</div>
-            <div style="font-size:11px;color:var(--sidebar-muted);margin-top:1px;">&#115;&#99;&#114;&#105;&#112;&#116;&#119;&#111;&#114;&#107;&#115;&#116;&#117;&#100;&#105;&#111;&#64;&#104;&#111;&#116;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;</div>
+            <div style="font-size:11px;color:var(--sidebar-muted);margin-top:1px;">&#104;&#101;&#108;&#108;&#111;&#64;&#115;&#99;&#114;&#105;&#112;&#116;&#119;&#111;&#114;&#107;&#115;&#116;&#117;&#100;&#105;&#111;&#46;&#99;&#111;&#109;</div>
           </div>
           <span style="margin-left:auto;opacity:.5;font-size:12px;">↗</span>
         </a>
@@ -869,65 +818,6 @@
     </div>
     <div class="modal-footer">
       <button class="tb-btn primary" onclick="closeModal('modal-support')">Close</button>
-    </div>
-  </div>
-</div>
-
-<!-- SETTINGS MODAL -->
-<div class="modal-overlay hidden" id="modal-settings">
-  <div class="modal" style="width:460px;">
-    <div class="modal-header">
-      <div class="modal-title">⚙ Settings</div>
-      <button class="modal-close" onclick="closeModal('modal-settings')">✕</button>
-    </div>
-    <div class="modal-body" style="display:flex;flex-direction:column;gap:22px;">
-
-      <div>
-        <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-light);margin-bottom:10px;">🎨 Colour Theme</div>
-        <div class="theme-swatches" id="theme-swatches">
-          <div class="theme-swatch active" data-theme="forest" onclick="applyTheme('forest')" title="Forest">
-            <div class="swatch-top" style="background:linear-gradient(135deg,#1a1f14 50%,#2d5a27 100%);"></div>
-            <div class="swatch-bot" style="background:#1a1f14;"><span class="swatch-label" style="color:#d4a843;">Forest</span></div>
-            <span class="swatch-check" style="color:#d4a843;">✓</span>
-          </div>
-          <div class="theme-swatch" data-theme="midnight" onclick="applyTheme('midnight')" title="Midnight">
-            <div class="swatch-top" style="background:linear-gradient(135deg,#0d1020 50%,#2a4080 100%);"></div>
-            <div class="swatch-bot" style="background:#0d1020;"><span class="swatch-label" style="color:#8878c8;">Midnight</span></div>
-            <span class="swatch-check" style="color:#8878c8;">✓</span>
-          </div>
-          <div class="theme-swatch" data-theme="ember" onclick="applyTheme('ember')" title="Ember">
-            <div class="swatch-top" style="background:linear-gradient(135deg,#1e0e08 50%,#8a2810 100%);"></div>
-            <div class="swatch-bot" style="background:#1e0e08;"><span class="swatch-label" style="color:#e09030;">Ember</span></div>
-            <span class="swatch-check" style="color:#e09030;">✓</span>
-          </div>
-          <div class="theme-swatch" data-theme="stone" onclick="applyTheme('stone')" title="Stone">
-            <div class="swatch-top" style="background:linear-gradient(135deg,#1a1c1e 50%,#4a6070 100%);"></div>
-            <div class="swatch-bot" style="background:#1a1c1e;"><span class="swatch-label" style="color:#b89878;">Stone</span></div>
-            <span class="swatch-check" style="color:#b89878;">✓</span>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-light);margin-bottom:4px;">✦ App Mode</div>
-        <div style="font-size:11px;color:var(--sidebar-muted);margin-bottom:10px;line-height:1.5;">Choose how Realm Keeper presents itself. You can switch at any time — your world data is unaffected.</div>
-        <div class="mode-btns">
-          <div class="mode-btn active" id="mode-btn-dm" onclick="applyMode('dm')">
-            <div class="mode-btn-icon">🐉</div>
-            <div class="mode-btn-title">DM Mode</div>
-            <div class="mode-btn-desc">Full D&amp;D toolkit — DM notes, monster search, stat blocks</div>
-          </div>
-          <div class="mode-btn" id="mode-btn-writer" onclick="applyMode('writer')">
-            <div class="mode-btn-icon">✍</div>
-            <div class="mode-btn-title">Writer Mode</div>
-            <div class="mode-btn-desc">Focused world-building for fantasy writers — clean, no DM clutter</div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-    <div class="modal-footer">
-      <button class="tb-btn primary" onclick="closeModal('modal-settings')">Done</button>
     </div>
   </div>
 </div>
@@ -956,6 +846,7 @@
     <div id="graph-title">🕸 Connection Graph</div>
     <div id="graph-filters">
       <span style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:.1em;color:rgba(216,208,184,.4);text-transform:uppercase;margin-right:4px;">Show:</span>
+      <button class="gf-btn active" data-kind="all" onclick="toggleGraphFilter('all')" style="--fc:#d8d0b8">All</button>
       <button class="gf-btn active" data-kind="map" onclick="toggleGraphFilter('map')" style="--fc:#b8922a">Maps</button>
       <button class="gf-btn active" data-kind="pin" onclick="toggleGraphFilter('pin')" style="--fc:#d4a843">Pins</button>
       <button class="gf-btn active" data-kind="npc" onclick="toggleGraphFilter('npc')" style="--fc:rgba(212,168,67,.6)">NPCs</button>
@@ -963,7 +854,7 @@
       <button class="gf-btn active" data-kind="quest" onclick="toggleGraphFilter('quest')" style="--fc:#c44a4a">Quests</button>
       <button class="gf-btn active" data-kind="item" onclick="toggleGraphFilter('item')" style="--fc:#4a8a42">Items</button>
       <button class="gf-btn active" data-kind="lore" onclick="toggleGraphFilter('lore')" style="--fc:#4a7aaa">Lore</button>
-      <button class="gf-btn active" data-kind="monster" onclick="toggleGraphFilter('monster')" style="--fc:#8a4a2a" id="gf-monster">Monsters</button>
+      <button class="gf-btn active" data-kind="monster" onclick="toggleGraphFilter('monster')" style="--fc:#8a4a2a">Monsters</button>
       <button class="gf-btn active" data-kind="location" onclick="toggleGraphFilter('location')" style="--fc:#8a7a42">Locations</button>
     </div>
     <div id="graph-hint">Drag to pan · Scroll to zoom · Click a node to open it</div>
@@ -1012,97 +903,6 @@ const PIN_TYPES=[
   {id:'mystery',label:'Mystery',icon:'❓',color:'#888888'},
 ];
 
-// ── THEME & MODE SYSTEM ────────────────────────────────────────
-let currentTheme='forest';
-let currentMode='dm'; // 'dm' | 'writer'
-
-// Writer mode label overrides
-const WRITER_LABELS={
-  npc:     {label:'Character', icon:'👤'},
-  quest:   {label:'Plot Thread', icon:'📜'},
-  monster: {label:'Creature', icon:'🐉'},
-  faction: {label:'Faction', icon:'⚔'},
-  item:    {label:'Item', icon:'💎'},
-  lore:    {label:'Lore', icon:'📚'},
-  location:{label:'Location', icon:'🏛'},
-};
-
-function getWikiLabel(type){
-  if(currentMode==='writer'&&WRITER_LABELS[type])return WRITER_LABELS[type];
-  return {label:WIKI_TYPES[type]?.label||type, icon:WIKI_TYPES[type]?.icon||'📄'};
-}
-
-function applyTheme(name){
-  currentTheme=name;
-  document.documentElement.setAttribute('data-theme',name==='forest'?'':name);
-  localStorage.setItem('realmkeeper_theme',name);
-  // Update swatch active state
-  document.querySelectorAll('.theme-swatch').forEach(s=>{
-    s.classList.toggle('active',s.dataset.theme===name);
-  });
-}
-
-function applyMode(mode){
-  currentMode=mode;
-  localStorage.setItem('realmkeeper_mode',mode);
-  // Toggle body class for CSS rules
-  document.body.classList.toggle('writer-mode',mode==='writer');
-  // Update mode button active states
-  document.getElementById('mode-btn-dm')?.classList.toggle('active',mode==='dm');
-  document.getElementById('mode-btn-writer')?.classList.toggle('active',mode==='writer');
-  // Update wiki filter chips
-  updateWikiFilterChips();
-  // Update wiki type select options in open panel
-  updateWikiTypeSelect();
-  // Update graph filter monster label
-  const gfMonster=document.getElementById('gf-monster');
-  if(gfMonster)gfMonster.textContent=mode==='writer'?'Creatures':'Monsters';
-  // Re-render wiki list to use correct labels
-  renderWikiList();
-  // If wiki panel is open, re-render it
-  const wp=document.getElementById('wiki-panel');
-  if(wp.classList.contains('open')&&activeWikiId){
-    const entry=getWikiEntries().find(e=>e.id===activeWikiId);
-    if(entry)renderWikiPanel(entry);
-  }
-}
-
-function updateWikiFilterChips(){
-  // In writer mode, hide the Monster filter chip; show it in DM mode
-  const chips=document.querySelectorAll('#wiki-filters .wiki-filter-chip');
-  chips.forEach(chip=>{
-    if(chip.dataset.type==='monster'){
-      chip.style.display=currentMode==='writer'?'none':'';
-    }
-  });
-  // Update chip labels for renamed types
-  chips.forEach(chip=>{
-    const t=chip.dataset.type;
-    if(t&&t!=='all'){
-      const lbl=getWikiLabel(t);
-      // Only rename the text chips that have text (not icon-only)
-      if(chip.textContent.length>2){chip.textContent=lbl.label;}
-    }
-  });
-}
-
-function updateWikiTypeSelect(){
-  const sel=document.getElementById('wp-type-select');if(!sel)return;
-  sel.querySelectorAll('option').forEach(opt=>{
-    const t=opt.value;
-    const lbl=getWikiLabel(t);
-    opt.textContent=lbl.icon+' '+lbl.label;
-    if(t==='monster')opt.style.display=currentMode==='writer'?'none':'';
-  });
-}
-
-function loadPreferences(){
-  const theme=localStorage.getItem('realmkeeper_theme')||'forest';
-  const mode=localStorage.getItem('realmkeeper_mode')||'dm';
-  applyTheme(theme);
-  applyMode(mode);
-}
-
 // ── INIT ───────────────────────────────────────────────────────
 async function init(){
   await loadFromStorage();
@@ -1114,7 +914,6 @@ async function init(){
   document.getElementById('world-name-input').addEventListener('input',e=>{state.worldName=e.target.value;save();});
   document.addEventListener('keydown',onKeyDown);
   document.addEventListener('click',()=>closeCtxMenu());
-  loadPreferences();
 }
 // ── STORAGE: OPFS first, localStorage fallback ─────────────────
 let _opfsRoot=null;
@@ -1572,7 +1371,8 @@ function switchMap(mapId){
 
 // ── RIGHT PANEL ────────────────────────────────────────────────
 function openRightPanel(pinId){
-  const map=getCurrentMap();const pin=map.pins.find(p=>p.id===pinId);if(!pin)return;
+  const map=getCurrentMap();if(!map)return;
+  const pin=map.pins.find(p=>p.id===pinId);if(!pin)return;
   document.getElementById('rp-title').value=pin.name;
   document.getElementById('rp-pin-type').value=pin.type;
   document.getElementById('rp-desc').value=pin.description||'';
@@ -1649,9 +1449,25 @@ function confirmAddMap(){
   const parentMapId=document.getElementById('new-map-parent').value||null;
   const id=uid();const map={id,name,type,parentMapId,imageData:pendingMapImg,pins:[]};
   state.maps.push(map);if(!state.currentMapId)state.currentMapId=id;save();
-  closeModal('modal-add-map');renderAll();
+  closeModal('modal-add-map');
+  // If we were creating a nested map from a pin, auto-link it
+  if(_pendingNestedPinId){
+    const parentMap=state.maps.find(m=>m.pins.some(p=>p.id===_pendingNestedPinId));
+    if(parentMap){
+      const pin=parentMap.pins.find(p=>p.id===_pendingNestedPinId);
+      if(pin){pin.nestedMapId=id;save();}
+    }
+    populateNestedMapSelect();
+    document.getElementById('rp-nested-map').value=id;
+    document.getElementById('nested-map-nav').style.display='none';
+    _pendingNestedPinId=null;
+    toast('🗺 '+name+' created and linked to pin','success');
+  } else {
+    toast('🗺 '+name+' added','success');
+  }
+  renderAll();
   if(pendingMapImg){switchMap(id);setTimeout(fitToView,80);}
-  toast('🗺 '+name+' added','success');pendingMapImg=null;
+  pendingMapImg=null;
 }
 
 // ── CTX MENU ───────────────────────────────────────────────────
@@ -1757,22 +1573,17 @@ function importWorld(inp){
 }
 
 // ── CREATE NESTED MAP FROM PIN ─────────────────────────────────
+let _pendingNestedPinId=null;
 function createNestedMapFromPin(){
   if(!selectedPinId){toast('Open a pin entry first','error');return;}
+  _pendingNestedPinId=selectedPinId;
   const pinName=document.getElementById('rp-title').value.trim()||'Nested Map';
-  const suggestedName=pinName+' — Interior';
-  const name=prompt('Name for the new nested map:',suggestedName);
-  if(!name)return;
-  const id=uid();
-  const map={id,name:name.trim(),type:'city',parentMapId:state.currentMapId||null,imageData:null,pins:[]};
-  state.maps.push(map);
-  // Link it to the current pin immediately
-  document.getElementById('rp-nested-map').innerHTML='';
-  populateNestedMapSelect();
-  document.getElementById('rp-nested-map').value=id;
-  save();
-  renderMapList();
-  toast('🗺 "'+map.name+'" created and linked — add it to the sidebar and upload a map image','success');
+  openAddMapModal(state.currentMapId);
+  // Pre-fill name with pin name
+  setTimeout(()=>{
+    const inp=document.getElementById('new-map-name');
+    if(inp&&!inp.value)inp.value=pinName+' — Interior';
+  },50);
 }
 
 // ── DEMO WORLD ─────────────────────────────────────────────────
@@ -1938,10 +1749,9 @@ function renderWikiList(){
   }
   entries.forEach(e=>{
     const wt=WIKI_TYPES[e.type]||WIKI_TYPES.npc;
-    const lbl=getWikiLabel(e.type);
     const el=document.createElement('div');
     el.className='wiki-list-item'+(e.id===activeWikiId?' active':'');
-    el.innerHTML=`<span class="wiki-entry-icon">${lbl.icon}</span><span class="wiki-entry-name">${esc(e.name)}</span><span class="wiki-entry-type">${lbl.label}</span>`;
+    el.innerHTML=`<span class="wiki-entry-icon">${wt.icon}</span><span class="wiki-entry-name">${esc(e.name)}</span><span class="wiki-entry-type">${wt.label}</span>`;
     el.onclick=()=>openWikiEntry(e.id);
     list.appendChild(el);
   });
@@ -1990,19 +1800,16 @@ function closeWikiPanel(){
 
 function renderWikiPanel(entry){
   const wt=WIKI_TYPES[entry.type]||WIKI_TYPES.npc;
-  const lbl=getWikiLabel(entry.type);
   // Header
   document.getElementById('wp-title').value=entry.name||'';
   autoResizeTitle(document.getElementById('wp-title'));
   document.getElementById('wp-type-select').value=entry.type;
-  updateWikiTypeSelect();
   const badge=document.getElementById('wp-type-badge');
-  badge.textContent=lbl.icon+' '+lbl.label;
+  badge.textContent=wt.icon+' '+wt.label;
   badge.className='rp-type-badge '+wt.cls;
-  // Body — render fields (hide 'notes' in writer mode)
+  // Body — render fields
   const body=document.getElementById('wp-body');body.innerHTML='';
-  const activeFields=currentMode==='writer'?wt.fields.filter(f=>f!=='notes'):wt.fields;
-  activeFields.forEach(fieldKey=>{
+  wt.fields.forEach(fieldKey=>{
     const meta=FIELD_META[fieldKey];if(!meta)return;
     if(fieldKey==='statblock'&&entry.fields.statblock){
       body.appendChild(renderStatBlockField(entry.fields.statblock));return;
@@ -2368,22 +2175,45 @@ function buildGraphData(){
   gEdges.forEach(e=>{e.s=nodeMap[e.source];e.t=nodeMap[e.target];});
 }
 
+const ALL_GRAPH_KINDS=['map','pin','npc','faction','quest','item','lore','monster','location'];
+function setGraphFilterUI(){
+  const allActive=ALL_GRAPH_KINDS.every(k=>gActiveFilters.has(k));
+  document.querySelector('.gf-btn[data-kind="all"]').classList.toggle('active',allActive);
+  ALL_GRAPH_KINDS.forEach(k=>{
+    const btn=document.querySelector(`.gf-btn[data-kind="${k}"]`);
+    if(btn)btn.classList.toggle('active',gActiveFilters.has(k));
+  });
+}
 function toggleGraphFilter(kind){
-  const btn=document.querySelector(`.gf-btn[data-kind="${kind}"]`);
-  if(gActiveFilters.has(kind)){
-    gActiveFilters.delete(kind);
-    btn&&btn.classList.remove('active');
+  if(kind==='all'){
+    // If already all active, do nothing; otherwise activate everything
+    const allActive=ALL_GRAPH_KINDS.every(k=>gActiveFilters.has(k));
+    if(!allActive){
+      gActiveFilters=new Set(ALL_GRAPH_KINDS);
+    }
   } else {
-    gActiveFilters.add(kind);
-    btn&&btn.classList.add('active');
+    const allWereActive=ALL_GRAPH_KINDS.every(k=>gActiveFilters.has(k));
+    if(allWereActive){
+      // Switch from "all" to just this one kind
+      gActiveFilters=new Set([kind]);
+    } else if(gActiveFilters.has(kind)){
+      // Deselect — but don't allow zero active filters
+      if(gActiveFilters.size>1){
+        gActiveFilters.delete(kind);
+      }
+    } else {
+      gActiveFilters.add(kind);
+    }
   }
+  setGraphFilterUI();
   drawGraph();
+  wakeGraphSim();
 }
 
 function openGraphView(){
   // Reset all filters to active
-  gActiveFilters=new Set(['map','pin','npc','faction','quest','item','lore','monster','location']);
-  document.querySelectorAll('.gf-btn').forEach(b=>b.classList.add('active'));
+  gActiveFilters=new Set(ALL_GRAPH_KINDS);
+  setGraphFilterUI();
 
   buildGraphData();
   const overlay=document.getElementById('graph-overlay');
@@ -2468,16 +2298,33 @@ function tickForces(){
   });
 }
 
-let gSimTick=0;
+let gSimTick=0,gNeedsRedraw=false;
 function startGraphSim(){
-  gSimTick=0;
+  gSimTick=0;gNeedsRedraw=true;
   function loop(){
-    if(gSimTick<220){tickForces();gSimTick++;}
-    drawGraph();
-    gAnimId=requestAnimationFrame(loop);
+    const simActive=gSimTick<220;
+    const dragging=gDrag&&gDrag.active;
+    const panning=gPan&&gPan.active;
+    if(simActive){tickForces();gSimTick++;gNeedsRedraw=true;}
+    if(gNeedsRedraw||dragging||panning){drawGraph();gNeedsRedraw=false;}
+    if(simActive||dragging||panning){gAnimId=requestAnimationFrame(loop);}
+    else{gAnimId=null;}
   }
   if(gAnimId)cancelAnimationFrame(gAnimId);
   gAnimId=requestAnimationFrame(loop);
+}
+function wakeGraphSim(){
+  gNeedsRedraw=true;
+  if(!gAnimId){
+    function loop(){
+      const dragging=gDrag&&gDrag.active;
+      const panning=gPan&&gPan.active;
+      if(gNeedsRedraw||dragging||panning){drawGraph();gNeedsRedraw=false;}
+      if(dragging||panning){gAnimId=requestAnimationFrame(loop);}
+      else{gAnimId=null;}
+    }
+    gAnimId=requestAnimationFrame(loop);
+  }
 }
 
 // ── RENDER ─────────────────────────────────────────────────────
@@ -2592,7 +2439,15 @@ function onGraphNodeClick(node){
     openWikiEntry(node.sourceId);
   } else if(node.sourceKind==='pin'){
     if(node.mapId){switchMap(node.mapId);}
-    setTimeout(()=>{selectPin(node.sourceId);openRightPanel(node.sourceId);},80);
+    switchSidebarTab('pins');
+    setTimeout(()=>{
+      const map=getCurrentMap();
+      if(!map)return;
+      const pin=map.pins.find(p=>p.id===node.sourceId);
+      if(!pin)return;
+      selectPin(node.sourceId);
+      openRightPanel(node.sourceId);
+    },150);
   } else if(node.sourceKind==='map'){
     switchMap(node.sourceId);
   }
@@ -2608,6 +2463,7 @@ function startNodeDrag(node,e){
     gDrag.node.x=gDrag.nodeStartX+dx;
     gDrag.node.y=gDrag.nodeStartY+dy;
     gDrag.node.vx=0;gDrag.node.vy=0;
+    wakeGraphSim();
   };
   const onUp=()=>{
     gDrag.active=false;
@@ -2632,6 +2488,7 @@ function setupGraphInteraction(){
     if(!gPan.active)return;
     gCam.x=gPan.camStartX+(e.clientX-gPan.startX);
     gCam.y=gPan.camStartY+(e.clientY-gPan.startY);
+    wakeGraphSim();
   });
   window.addEventListener('mouseup',()=>{gPan.active=false;svg.classList.remove('grabbing');});
   svg.onwheel=e=>{
@@ -2643,6 +2500,7 @@ function setupGraphInteraction(){
     gCam.x=mx-(mx-gCam.x)*(ns/gCam.scale);
     gCam.y=my-(my-gCam.y)*(ns/gCam.scale);
     gCam.scale=ns;
+    wakeGraphSim();
   };
   // Touch: single-finger pan, pinch zoom
   let gTouch={dragging:false,pinching:false,lastDist:0};
@@ -2778,13 +2636,13 @@ function runSearch(q){
   // ── Journal ──
   const wikiHits=[];
   getWikiEntries().forEach(e=>{
-    const lbl=getWikiLabel(e.type);
+    const wt=WIKI_TYPES[e.type]||WIKI_TYPES.npc;
     const allText=Object.values(e.fields||{}).filter(v=>typeof v==='string').join(' ');
     const textIdx=allText.toLowerCase().indexOf(ql);
     if(e.name.toLowerCase().includes(ql)||textIdx>=0){
       const snippet=textIdx>=0?getSnippet(allText,textIdx,q):'';
-      wikiHits.push({kind:'wiki',icon:lbl.icon,name:e.name,
-        meta:lbl.label,snippet,
+      wikiHits.push({kind:'wiki',icon:wt.icon,name:e.name,
+        meta:wt.label,snippet,
         id:e.id,action:()=>{switchSidebarTab('wiki');openWikiEntry(e.id);}});
     }
   });
