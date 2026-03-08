@@ -329,8 +329,8 @@
   #graph-hint{font-size:11px;color:var(--sidebar-muted);font-style:italic;}
   #graph-close{background:none;border:1px solid rgba(200,187,160,.2);color:var(--sidebar-muted);font-size:13px;padding:5px 12px;border-radius:4px;cursor:pointer;font-family:'Source Serif 4',serif;transition:all .15s;}
   #graph-close:hover{border-color:var(--gold);color:var(--gold);}
-  #graph-canvas-wrap{flex:1;position:relative;overflow:hidden;display:flex;flex-direction:row;}
-  #graph-svg{flex:1;min-width:0;height:100%;cursor:grab;}
+  #graph-canvas-wrap{flex:1;position:relative;overflow:hidden;}
+  #graph-svg{width:100%;height:100%;cursor:grab;}
   #graph-svg.grabbing{cursor:grabbing;}
   .g-edge{stroke:rgba(200,187,160,.18);stroke-width:1.5;fill:none;transition:stroke .15s;}
   .g-edge.map-link{stroke:rgba(184,146,42,.25);stroke-dasharray:4 3;}
@@ -348,31 +348,6 @@
   #graph-empty-msg{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;pointer-events:none;}
   #graph-empty-msg .gem{font-size:48px;opacity:.15;}
   #graph-empty-msg p{font-family:'Cinzel',serif;font-size:13px;color:var(--sidebar-muted);text-align:center;max-width:280px;line-height:1.7;letter-spacing:.04em;}
-  /* ── GRAPH INFO SIDEBAR ──────────────────────────────────────── */
-  #graph-info-panel{width:0;background:rgba(18,22,14,.97);border-left:1px solid rgba(200,187,160,.13);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;transition:width .25s ease;z-index:20;position:relative;}
-  #graph-info-panel.open{width:320px;}
-  #gip-header{padding:16px 16px 12px;border-bottom:1px solid rgba(200,187,160,.1);flex-shrink:0;position:relative;}
-  #gip-close{position:absolute;top:12px;right:12px;background:none;border:none;color:var(--sidebar-muted);cursor:pointer;font-size:17px;line-height:1;padding:3px 6px;border-radius:4px;transition:all .15s;}
-  #gip-close:hover{background:rgba(200,187,160,.1);color:var(--sidebar-text);}
-  #gip-badge{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:2px 8px;border-radius:3px;margin-bottom:8px;display:inline-block;}
-  #gip-name{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;color:var(--gold-light);line-height:1.25;margin:0;padding-right:26px;}
-  #gip-body{flex:1;overflow-y:auto;padding:14px 16px;min-height:0;}
-  #gip-body::-webkit-scrollbar{width:4px;}
-  #gip-body::-webkit-scrollbar-thumb{background:rgba(200,187,160,.12);border-radius:2px;}
-  .gip-section-label{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--sidebar-muted);margin-bottom:6px;margin-top:14px;}
-  .gip-section-label:first-child{margin-top:0;}
-  .gip-text{font-family:'Source Serif 4',serif;font-size:13px;color:var(--sidebar-text);line-height:1.65;white-space:pre-wrap;background:rgba(200,187,160,.04);border:1px solid rgba(200,187,160,.09);border-radius:5px;padding:8px 10px;}
-  .gip-text.empty{color:var(--sidebar-muted);font-style:italic;}
-  .gip-pill-row{display:flex;flex-wrap:wrap;gap:5px;margin-top:2px;}
-  .gip-pill{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.07em;padding:3px 9px;border-radius:3px;border:1px solid rgba(200,187,160,.18);color:var(--sidebar-muted);background:rgba(200,187,160,.05);cursor:pointer;transition:all .15s;text-transform:uppercase;}
-  .gip-pill:hover{border-color:var(--gold);color:var(--gold);background:rgba(184,146,42,.1);}
-  .gip-map-btn{display:flex;align-items:center;gap:8px;width:100%;padding:9px 12px;border-radius:6px;border:1px solid rgba(184,146,42,.3);background:rgba(184,146,42,.08);color:var(--gold-light);font-family:'Source Serif 4',serif;font-size:13px;cursor:pointer;transition:all .15s;margin-top:6px;text-align:left;}
-  .gip-map-btn:hover{background:rgba(184,146,42,.18);border-color:var(--gold);}
-  .gip-map-btn .gip-map-icon{font-size:15px;flex-shrink:0;}
-  .gip-map-btn .gip-map-label{font-size:10px;font-family:'Cinzel',serif;letter-spacing:.07em;text-transform:uppercase;color:var(--sidebar-muted);display:block;margin-bottom:1px;}
-  #gip-footer{padding:10px 16px;border-top:1px solid rgba(200,187,160,.1);flex-shrink:0;}
-  .gip-goto-btn{width:100%;padding:9px;border-radius:6px;font-family:'Cinzel',serif;font-size:10px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border:1px solid rgba(184,146,42,.4);background:rgba(184,146,42,.12);color:var(--gold);transition:all .15s;}
-  .gip-goto-btn:hover{background:rgba(184,146,42,.25);border-color:var(--gold);}
   /* ── GLOBAL SEARCH ───────────────────────────────────────────── */
   #search-wrap{position:relative;flex-shrink:0;}
   #search-input{width:0;background:rgba(200,187,160,.07);border:1px solid transparent;border-radius:5px;color:var(--sidebar-text);font-family:'Source Serif 4',serif;font-size:13px;padding:5px 0;outline:none;transition:width .22s ease,border-color .2s,padding .22s ease;overflow:hidden;white-space:nowrap;}
@@ -601,7 +576,7 @@
       <div class="rp-field-label">Nested Map</div>
       <div style="display:flex;gap:6px;align-items:center;">
         <select class="rp-select" id="rp-nested-map" style="flex:1;min-width:0;" onchange="onNestedMapChange()">
-          <option value="">— No nested map —</option>
+          <option value="">— Select —</option>
         </select>
         <button class="rp-btn" onclick="createNestedMapFromPin()" title="Create a new map and link it to this pin" style="flex:0 0 auto;padding:7px 10px;font-size:11px;white-space:nowrap;">＋ New</button>
       </div>
@@ -895,18 +870,6 @@
     <div id="graph-empty-msg" style="display:none;">
       <div class="gem">🕸</div>
       <p>No connections yet. Add journal entries and use [[backlinks]] to start building your web.</p>
-    </div>
-    <!-- GRAPH INFO SIDEBAR -->
-    <div id="graph-info-panel">
-      <div id="gip-header">
-        <button id="gip-close" onclick="closeGraphInfoPanel()" title="Close">✕</button>
-        <div id="gip-badge" class="rp-type-badge"></div>
-        <div id="gip-name"></div>
-      </div>
-      <div id="gip-body"></div>
-      <div id="gip-footer" style="display:none;">
-        <button class="gip-goto-btn" id="gip-goto-btn" onclick="graphInfoGoTo()">↗ Open in Editor</button>
-      </div>
     </div>
   </div>
 </div>
@@ -1439,7 +1402,7 @@ function autoResizeTitle(el){
 }
 function populateNestedMapSelect(){
   const sel=document.getElementById('rp-nested-map');const cur=state.currentMapId;
-  sel.innerHTML='<option value="">— No nested map —</option>';
+  sel.innerHTML='<option value="">— Select —</option>';
   state.maps.filter(m=>m.id!==cur).forEach(m=>{const o=document.createElement('option');o.value=m.id;o.textContent=m.name;sel.appendChild(o);});
 }
 
@@ -2266,7 +2229,6 @@ function openGraphView(){
 }
 
 function closeGraphView(){
-  closeGraphInfoPanel();
   document.getElementById('graph-overlay').classList.remove('visible');
   if(gAnimId){cancelAnimationFrame(gAnimId);gAnimId=null;}
 }
@@ -2410,7 +2372,6 @@ function drawGraph(){
     el.setAttribute('x1',e.s.x);el.setAttribute('y1',e.s.y);
     el.setAttribute('x2',e.t.x);el.setAttribute('y2',e.t.y);
     el.setAttribute('class','g-edge'+(e.type==='map-link'?' map-link':''));
-    el.setAttribute('data-src',e.source);el.setAttribute('data-tgt',e.target);
   });
 
   // Draw nodes
@@ -2472,176 +2433,6 @@ function hideGraphTooltip(){document.getElementById('graph-tooltip').style.displ
 
 // ── NODE CLICK ─────────────────────────────────────────────────
 function onGraphNodeClick(node){
-  // Highlight selected node and its edges
-  document.querySelectorAll('.g-node').forEach(el=>el.classList.remove('highlighted'));
-  document.querySelectorAll('.g-edge').forEach(el=>el.classList.remove('highlighted'));
-  const grp=document.querySelector(`.g-node[data-id="${CSS.escape(node.id)}"]`);
-  if(grp) grp.classList.add('highlighted');
-  gEdges.forEach(e=>{
-    if(e.s===node||e.t===node){
-      const edgeEl=document.querySelector(`.g-edge[data-src="${CSS.escape(e.source)}"][data-tgt="${CSS.escape(e.target)}"]`);
-      if(edgeEl) edgeEl.classList.add('highlighted');
-    }
-  });
-  openGraphInfoPanel(node);
-}
-
-let gInfoNode=null;
-
-function openGraphInfoPanel(node){
-  gInfoNode=node;
-  const panel=document.getElementById('graph-info-panel');
-  const badge=document.getElementById('gip-badge');
-  const nameEl=document.getElementById('gip-name');
-  const body=document.getElementById('gip-body');
-  const footer=document.getElementById('gip-footer');
-
-  nameEl.textContent=node.label;
-
-  const badgeColors={
-    map:'background:rgba(184,146,42,.2);color:#d4a843;border:1px solid rgba(184,146,42,.4);',
-    pin:'background:rgba(212,168,67,.18);color:#d4a843;border:1px solid rgba(212,168,67,.35);',
-    npc:'background:rgba(212,168,67,.12);color:rgba(212,168,67,.8);border:1px solid rgba(212,168,67,.25);',
-    faction:'background:rgba(122,74,170,.2);color:#a87adb;border:1px solid rgba(122,74,170,.4);',
-    quest:'background:rgba(196,74,74,.2);color:#e07a7a;border:1px solid rgba(196,74,74,.4);',
-    item:'background:rgba(74,138,66,.2);color:#7ac472;border:1px solid rgba(74,138,66,.4);',
-    lore:'background:rgba(74,122,170,.2);color:#7aaae0;border:1px solid rgba(74,122,170,.4);',
-    monster:'background:rgba(138,74,42,.2);color:#d4886a;border:1px solid rgba(138,74,42,.4);',
-    location:'background:rgba(138,122,66,.2);color:#c4b46a;border:1px solid rgba(138,122,66,.4);',
-  };
-  const bStyle=badgeColors[node.kind]||badgeColors[node.subtype]||'background:rgba(200,187,160,.1);color:var(--sidebar-muted);';
-  badge.setAttribute('style',bStyle);
-
-  const ICONS={map:'🗺',pin:'📍',npc:'👤',faction:'⚔',quest:'📜',item:'💎',lore:'📚',monster:'🐉',location:'🏛'};
-  const kindLabel={map:'Map',pin:'Pin',npc:'NPC',faction:'Faction',quest:'Quest',item:'Item',lore:'Lore',monster:'Monster',location:'Location'};
-  badge.textContent=(ICONS[node.subtype]||ICONS[node.kind]||'●')+' '+(kindLabel[node.subtype]||kindLabel[node.kind]||node.kind);
-
-  body.innerHTML='';
-
-  const connectedNodes=[];
-  gEdges.forEach(e=>{
-    if(e.s===node) connectedNodes.push(e.t);
-    else if(e.t===node) connectedNodes.push(e.s);
-  });
-
-  if(node.sourceKind==='wiki'){
-    const entry=getWikiEntries().find(e=>e.id===node.sourceId);
-    if(entry){
-      const wt=WIKI_TYPES[entry.type]||WIKI_TYPES.npc;
-      wt.fields.forEach(fk=>{
-        const meta=FIELD_META[fk];if(!meta)return;
-        const val=(entry.fields&&entry.fields[fk])||'';
-        if(!val)return;
-        const sec=document.createElement('div');
-        const lbl=document.createElement('div');lbl.className='gip-section-label';lbl.textContent=meta.label;
-        const txt=document.createElement('div');txt.className='gip-text';txt.textContent=val;
-        sec.appendChild(lbl);sec.appendChild(txt);body.appendChild(sec);
-      });
-    }
-  } else if(node.sourceKind==='pin'){
-    let pin=null,pinMap=null;
-    state.maps.forEach(m=>{const p=m.pins.find(p=>p.id===node.sourceId);if(p){pin=p;pinMap=m;}});
-    if(pin){
-      if(pin.description){
-        const sec=document.createElement('div');
-        sec.innerHTML=`<div class="gip-section-label">Description</div><div class="gip-text">${esc(pin.description)}</div>`;
-        body.appendChild(sec);
-      }
-      if(pin.notes){
-        const sec=document.createElement('div');
-        sec.innerHTML=`<div class="gip-section-label">DM Notes</div><div class="gip-text">${esc(pin.notes)}</div>`;
-        body.appendChild(sec);
-      }
-      if(pinMap){
-        const sec=document.createElement('div');
-        const lbl=document.createElement('div');lbl.className='gip-section-label';lbl.textContent='Parent Map';
-        const btn=document.createElement('button');btn.className='gip-map-btn';
-        btn.innerHTML=`<span class="gip-map-icon">🗺</span><span><span class="gip-map-label">Go to map</span>${esc(pinMap.name)}</span>`;
-        btn.onclick=()=>{closeGraphView();switchMap(pinMap.id);};
-        sec.appendChild(lbl);sec.appendChild(btn);body.appendChild(sec);
-      }
-      if(pin.nestedMapId){
-        const nm=state.maps.find(m=>m.id===pin.nestedMapId);
-        if(nm){
-          const sec=document.createElement('div');
-          const lbl=document.createElement('div');lbl.className='gip-section-label';lbl.textContent='Nested Map';
-          const btn=document.createElement('button');btn.className='gip-map-btn';
-          btn.innerHTML=`<span class="gip-map-icon">🗺</span><span><span class="gip-map-label">Open nested map</span>${esc(nm.name)}</span>`;
-          btn.onclick=()=>{closeGraphView();switchMap(nm.id);};
-          sec.appendChild(lbl);sec.appendChild(btn);body.appendChild(sec);
-        }
-      }
-    }
-  } else if(node.sourceKind==='map'){
-    const map=state.maps.find(m=>m.id===node.sourceId);
-    if(map){
-      if(map.type){
-        const sec=document.createElement('div');
-        sec.innerHTML=`<div class="gip-section-label">Type</div><div class="gip-text">${esc(map.type)}</div>`;
-        body.appendChild(sec);
-      }
-      if(map.pins&&map.pins.length){
-        const sec=document.createElement('div');
-        const lbl=document.createElement('div');lbl.className='gip-section-label';lbl.textContent=`Pins (${map.pins.length})`;
-        const pills=document.createElement('div');pills.className='gip-pill-row';
-        map.pins.slice(0,12).forEach(p=>{
-          const pill=document.createElement('button');pill.className='gip-pill';
-          const PT=PIN_TYPES.find(t=>t.id===p.type)||PIN_TYPES[0];
-          pill.textContent=PT.icon+' '+p.name;
-          pill.onclick=()=>{const pn=gNodes.find(n=>n.sourceId===p.id&&n.sourceKind==='pin');if(pn)openGraphInfoPanel(pn);};
-          pills.appendChild(pill);
-        });
-        if(map.pins.length>12){const more=document.createElement('span');more.className='gip-pill';more.style.cursor='default';more.textContent=`+${map.pins.length-12} more`;pills.appendChild(more);}
-        sec.appendChild(lbl);sec.appendChild(pills);body.appendChild(sec);
-      }
-      if(map.parentMapId){
-        const pm=state.maps.find(m=>m.id===map.parentMapId);
-        if(pm){
-          const sec=document.createElement('div');
-          const lbl=document.createElement('div');lbl.className='gip-section-label';lbl.textContent='Parent Map';
-          const btn=document.createElement('button');btn.className='gip-map-btn';
-          btn.innerHTML=`<span class="gip-map-icon">🗺</span><span><span class="gip-map-label">Go to parent</span>${esc(pm.name)}</span>`;
-          btn.onclick=()=>{closeGraphView();switchMap(pm.id);};
-          sec.appendChild(lbl);sec.appendChild(btn);body.appendChild(sec);
-        }
-      }
-    }
-  }
-
-  if(connectedNodes.length){
-    const sec=document.createElement('div');
-    const lbl=document.createElement('div');lbl.className='gip-section-label';lbl.textContent=`Connections (${connectedNodes.length})`;
-    const pills=document.createElement('div');pills.className='gip-pill-row';
-    const ICONS2={map:'🗺',pin:'📍',npc:'👤',faction:'⚔',quest:'📜',item:'💎',lore:'📚',monster:'🐉',location:'🏛'};
-    connectedNodes.forEach(cn=>{
-      const pill=document.createElement('button');pill.className='gip-pill';
-      pill.textContent=(ICONS2[cn.subtype]||ICONS2[cn.kind]||'●')+' '+cn.label;
-      pill.onclick=()=>openGraphInfoPanel(cn);
-      pills.appendChild(pill);
-    });
-    sec.appendChild(lbl);sec.appendChild(pills);body.appendChild(sec);
-  }
-
-  if(!body.children.length){
-    body.innerHTML='<div class="gip-text empty">No details available.</div>';
-  }
-
-  footer.style.display='block';
-  panel.classList.add('open');
-  document.getElementById('graph-hint').textContent='Click a node · Drag to pan · Scroll to zoom';
-}
-
-function closeGraphInfoPanel(){
-  document.getElementById('graph-info-panel').classList.remove('open');
-  document.querySelectorAll('.g-node').forEach(el=>el.classList.remove('highlighted'));
-  document.querySelectorAll('.g-edge').forEach(el=>el.classList.remove('highlighted'));
-  gInfoNode=null;
-  document.getElementById('graph-hint').textContent='Drag to pan · Scroll to zoom · Click a node to open it';
-}
-
-function graphInfoGoTo(){
-  if(!gInfoNode)return;
-  const node=gInfoNode;
   closeGraphView();
   if(node.sourceKind==='wiki'){
     switchSidebarTab('wiki');
@@ -2650,9 +2441,12 @@ function graphInfoGoTo(){
     if(node.mapId){switchMap(node.mapId);}
     switchSidebarTab('pins');
     setTimeout(()=>{
-      const map=getCurrentMap();if(!map)return;
-      const pin=map.pins.find(p=>p.id===node.sourceId);if(!pin)return;
-      selectPin(node.sourceId);openRightPanel(node.sourceId);
+      const map=getCurrentMap();
+      if(!map)return;
+      const pin=map.pins.find(p=>p.id===node.sourceId);
+      if(!pin)return;
+      selectPin(node.sourceId);
+      openRightPanel(node.sourceId);
     },150);
   } else if(node.sourceKind==='map'){
     switchMap(node.sourceId);
@@ -2690,16 +2484,10 @@ function setupGraphInteraction(){
     gPan={active:true,startX:e.clientX,startY:e.clientY,camStartX:gCam.x,camStartY:gCam.y};
     svg.classList.add('grabbing');
   };
-  svg.onclick=e=>{
-    if(e.target.closest('.g-node'))return;
-    if(!gPan._moved) closeGraphInfoPanel();
-    gPan._moved=false;
-  };
   window.addEventListener('mousemove',e=>{
     if(!gPan.active)return;
     gCam.x=gPan.camStartX+(e.clientX-gPan.startX);
     gCam.y=gPan.camStartY+(e.clientY-gPan.startY);
-    gPan._moved=true;
     wakeGraphSim();
   });
   window.addEventListener('mouseup',()=>{gPan.active=false;svg.classList.remove('grabbing');});
